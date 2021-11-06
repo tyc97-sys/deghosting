@@ -25,4 +25,4 @@ def Load_Image(dir_list):
 
     return img_list
 
-#cooooooooooooooooooool2
+#cooooooooooooooooooool2 
