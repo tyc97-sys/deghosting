@@ -24,9 +24,3 @@ def Load_Image(dir_list):
         img_list.append(cv.imread(imgdir))
 
     return img_list
-
-def RGB2GRAY(img_list):
-    img_gray = []
-    for img in img_list:
-        img_gray.append(cv.cvtColor(img, cv.COLOR_BGR2GRAY))
-    return img_gray
