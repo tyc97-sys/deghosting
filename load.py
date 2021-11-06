@@ -24,3 +24,5 @@ def Load_Image(dir_list):
         img_list.append(cv.imread(imgdir))
 
     return img_list
+
+#push push push push
