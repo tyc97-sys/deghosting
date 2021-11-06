@@ -1,4 +1,4 @@
-import cv2 as cv
+import cv2 
 import os
 import numpy as np
 
@@ -21,6 +21,6 @@ def Load_Image(dir_list):
         imgdir = os.path.join(dir_list, img)
         print(imgdir)
 
-        img_list.append(cv.imread(imgdir))
+        img_list.append(cv2.imread(imgdir))
 
     return img_list
