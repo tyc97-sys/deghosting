@@ -13,3 +13,4 @@ stack_image = stackImages.stackImages(scale=0.5, imgArray=img)
 
 cv.imshow("windows_name", stack_image)
 cv.waitKey(0)
+//20211106
