@@ -31,6 +31,9 @@ def RGB2GRAY(img_list):
         img_gray.append(cv.cvtColor(img, cv.COLOR_BGR2GRAY))
     return img_gray
 
-#cooooooooooooooooooooooooooooooooooool
-
-#### THIS IS PR TEST ####
+def norm(img_list):
+    img_norm = []
+    for img in img_list:
+        norm_ = img / 255.0
+        img_norm.append(norm_)
+    return img_norm
