@@ -9,7 +9,8 @@ path1 = os.path.join(prefix_path, '01')
 
 img = load.Load_Image(path1)  # img is a list of 2d ndarray
 gray = load.RGB2GRAY(img)  # gray is a list of 2d ndarray
-norm = load.norm(gray)  # norm is a list of 2d ndarray
+norm_gray = load.norm(gray)  # norm is a list of 2d ndarray
+norm_rgb = load.norm(img)
 
 print(norm)
 # stack_image = stackImages.stackImages(scale=0.5, imgArray=img)
