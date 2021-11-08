@@ -1,2 +1,1 @@
 # deghosting
-print(hiiiiii)
