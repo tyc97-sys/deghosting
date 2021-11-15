@@ -9,8 +9,8 @@ Created on Fri Nov 12 20:17:41 2021
 
 import numpy as np
 import cv2
-
 import math    
+
 def distance(x, y, i, j):
     """
     :input x:
@@ -97,18 +97,27 @@ def gamma_correction(img, c=1, g=1.5):
     INPUTS: 
         img = image
     PARAM:
-        c = parameter, the default is 1
+        c = average gray level in paper (2), the default is 1
         g = parameter, the default is 1.5
     OUTPUTS:
         gamma correction image.
     """
-    return np.power(img/float(np.max(img)),g)
+    out = img.copy()
+    out = out.astype(np.float32)
+    out /= 255.
+    out = (1/c * out) ** (1/g)
+
+    out *= 255
+    out = out.astype(np.uint8)
+    return out
+
 
 
 '''
 if __name__ == "__main__":
 
     src = cv2.imread('dog_old.jpg',0)
+    
     filtered_image_func = bilateralFilterFromCv2(src, 5, 60.0, 60.0)
     filtered_image_own  = bilateral_filter_own(src, 5, 60.0, 60.0)
 
@@ -125,15 +134,15 @@ if __name__ == "__main__":
     #/*---------------------------------test for gamma-----------------------------------
 
     src = cv2.imread('dog_old.jpg',1)
-    gamma = gamma_correction(src)
+    gamma = gamma_correction(src, 1.24, 1)
     cv2.imwrite("gamma.jpg", gamma)
     image = cv2.imread("gamma.jpg",1)
     cv2.imshow("gamma.jpg", gamma)
     cv2.imshow("src.jpg", src)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
 '''
+
 
 
 
