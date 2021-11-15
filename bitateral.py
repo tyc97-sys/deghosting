@@ -112,7 +112,7 @@ def gamma_correction(img, c=1, g=1.5):
     return out
 
 
-
+'''
 
 if __name__ == "__main__":
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     
     #src = cv2.imread('dog_old.jpg',1)
     
-    '''
+    
     filtered_image_func = bilateralFilterFromCv2(src, 5, 60.0, 60.0)
     filtered_image_own  = bilateral_filter_own(src, 5, 60.0, 60.0)
 
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    '''
+    
     #/*---------------------------------test for gamma-----------------------------------
 
     #src = cv2.imread('dog_old.jpg',1)
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
+'''
 
 
 
