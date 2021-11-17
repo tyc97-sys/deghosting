@@ -11,6 +11,21 @@ import numpy as np
 import cv2
 import math    
 
+
+def read_data(directory_name, arr, mode, numOfpicture):
+    for i in range (numOfpicture):
+        img = cv2.imread(directory_name + "/" + str(i+1) + ".jpg", mode)
+        arr.append(img)
+        
+def store_dataMulti(directory_name, arr, numOfpicture):
+    for i in range (numOfpicture):
+        cv2.imwrite("./" + directory_name + "/" + str(i+1) + ".jpg", arr[i])
+
+        
+def store_dataSingle(src, directory_name, storePicturename):
+    cv2.imwrite("./" + directory_name + "/" + str(storePicturename) + ".jpg", src)        
+    #cv2.imwrite("./HDR1/gamma.jpg", gamma)
+
 def distance(x, y, i, j):
     """
     :input x:
@@ -44,6 +59,7 @@ def apply_bilateral_filter(source, filtered_image, x, y, diameter, sigma_i, sigm
     i_filtered = 0
     Wp = 0
     i = 0
+    
     while i < diameter:
         j = 0
         while j < diameter:
@@ -63,12 +79,12 @@ def apply_bilateral_filter(source, filtered_image, x, y, diameter, sigma_i, sigm
     i_filtered = i_filtered / Wp
     filtered_image[x][y] = int(round(i_filtered))
 
-def bilateral_filter_own(source, filter_diameter, sigma_i, sigma_s):
+def bilateral_filter_own(sourceList, filter_diameter, sigma_i, sigma_s):
     """
     FUNCTION: bilateral_filter_own
         Call to filter the images with bilateral filter
     INPUTS:
-        source = image
+        sourceList
     PARAM:           
         filter_diameter = filter diameter   
         sigma_i = standard deviation of domain range
@@ -76,75 +92,69 @@ def bilateral_filter_own(source, filter_diameter, sigma_i, sigma_s):
     OUTPUTS:   
         filtered image
     """
-    filtered_image = np.zeros(source.shape)
-    i = 0
-    while i < len(source):
-        j = 0
-        while j < len(source[0]):
-            apply_bilateral_filter(source, filtered_image, i, j, filter_diameter, sigma_i, sigma_s)
-            j += 1
-        i += 1
-    return filtered_image
+    for k in range (len(sourceList)):
+        source = sourceList[k]
+        filtered_image = np.zeros(source.shape)
+        i = 0
+        while i < len(source):
+            j = 0
+            while j < len(source[0]):
+                apply_bilateral_filter(source, filtered_image, i, j, filter_diameter, sigma_i, sigma_s)
+                j += 1
+            i += 1
+        sourceList[k] = filtered_image
+        print("No.{} is finished".format(k+1))
 
-def bilateralFilterFromCv2(image, Diameter, sigmaColor, sigmaSpace):#call cv2 func
-    return cv2.bilateralFilter(image, Diameter, sigmaColor, sigmaSpace)
+def bilateralFilterFromCv2(imageList, Diameter, sigmaColor, sigmaSpace):#call cv2 func
+    for i in range (len(imageList)):
+        imageList[i] = cv2.bilateralFilter(imageList[i], Diameter, sigmaColor, sigmaSpace)
+        
 
 
-def gamma_correction(img, c=1, g=1.5):
+def gamma_correction(imgList, c=1, g=1.5):
     """
     FUNCTION: gamma_correction
         Call to deal with images with gamma correction
     INPUTS: 
-        img = image
+        imgList
     PARAM:
         c = average gray level in paper (2), the default is 1
         g = parameter, the default is 1.5
     OUTPUTS:
         gamma correction image.
     """
-    out = img.copy()
-    out = out.astype(np.float32)
-    out /= 255.
-    out = (1/c * out) ** (1/g)
-
-    out *= 255
-    out = out.astype(np.uint8)
-    return out
+    for i in range (len(imgList)):
+        out = imgList[i].copy()
+        out = out.astype(np.float32)
+        out /= 255.
+        out = (1/c * out) ** (1/g)
+        out *= 255
+        imgList[i] = out.astype(np.uint8)
+        
 
 
 
 '''
 if __name__ == "__main__":
-
-    src = cv2.imread('dog_old.jpg',0)
     
-    filtered_image_func = bilateralFilterFromCv2(src, 5, 60.0, 60.0)
-    filtered_image_own  = bilateral_filter_own(src, 5, 60.0, 60.0)
-
-    cv2.imwrite("filtered_image_own.jpg", filtered_image_own)
-    image = cv2.imread("filtered_image_own.jpg",0)
+    #/*---------------------------------test for bilateral-----------------------------------
     
-    cv2.imshow("filtered_image_func.jpg", filtered_image_func)
-    cv2.imshow("filtered_image_own.jpg", image)
-    cv2.imshow("src.jpg", src)
+    Picturelist = []
+    numOfpic = 6
+    read_data("HDR0", Picturelist, 0, numOfpic)
+    bilateral_filter_own(Picturelist, 5, 60.0, 60.0)
+    #bilateralFilterFromCv2(Picturelist, 5, 60.0, 60.0)
+    store_dataMulti("HDR2", Picturelist, numOfpic)
     
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     #/*---------------------------------test for gamma-----------------------------------
 
-    src = cv2.imread('dog_old.jpg',1)
-    gamma = gamma_correction(src, 1.24, 1)
-    cv2.imwrite("gamma.jpg", gamma)
-    image = cv2.imread("gamma.jpg",1)
-    cv2.imshow("gamma.jpg", gamma)
-    cv2.imshow("src.jpg", src)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    Picturelist = []
+    numOfpic = 6
+    read_data("HDR0", Picturelist, 1, numOfpic)
+    gamma_correction(Picturelist, 1, 1/2.5)
+    store_dataMulti("HDR1", Picturelist, numOfpic)
+
+    
 '''
-
-
-
-
 
 
