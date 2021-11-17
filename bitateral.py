@@ -12,6 +12,7 @@ import cv2
 import math    
 
 
+
 def read_data(directory_name, arr, mode, numOfpicture):
     for i in range (numOfpicture):
         img = cv2.imread(directory_name + "/" + str(i+1) + ".jpg", mode)
@@ -116,13 +117,17 @@ def gamma_correction(imgList, c=1, g=1.5):
     FUNCTION: gamma_correction
         Call to deal with images with gamma correction
     INPUTS: 
+
         imgList
+
+        img = imagein 
+
     PARAM:
         c = average gray level in paper (2), the default is 1
         g = parameter, the default is 1.5
     OUTPUTS:
         gamma correction image.
-    """
+
     for i in range (len(imgList)):
         out = imgList[i].copy()
         out = out.astype(np.float32)
@@ -133,10 +138,34 @@ def gamma_correction(imgList, c=1, g=1.5):
         
 
 
+    out = img.copy()
+    out = out.astype(np.float32)
+    out /= 255.
+    out = (1/c * out) ** (1/g)
+
+    out *= 255
+    out = out.astype(np.uint8)
+    return out
+
+
 
 '''
+
 if __name__ == "__main__":
+
+
+
+    src = cv2.imread('dog_old.jpg',1)
     
+    #src = cv2.imread('dog_old.jpg',1)
+    
+    
+    filtered_image_func = bilateralFilterFromCv2(src, 5, 60.0, 60.0)
+    filtered_image_own  = bilateral_filter_own(src, 5, 60.0, 60.0)
+
+    cv2.imwrite("filtered_image_own.jpg", filtered_image_own)
+    image = cv2.imread("filtered_image_own.jpg",0)
+
     #/*---------------------------------test for bilateral-----------------------------------
     
     Picturelist = []
@@ -146,6 +175,7 @@ if __name__ == "__main__":
     #bilateralFilterFromCv2(Picturelist, 5, 60.0, 60.0)
     store_dataMulti("HDR2", Picturelist, numOfpic)
     
+
     #/*---------------------------------test for gamma-----------------------------------
 
     Picturelist = []
@@ -153,6 +183,24 @@ if __name__ == "__main__":
     read_data("HDR0", Picturelist, 1, numOfpic)
     gamma_correction(Picturelist, 1, 1/2.5)
     store_dataMulti("HDR1", Picturelist, numOfpic)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    #/*---------------------------------test for gamma-----------------------------------
+
+    #src = cv2.imread('dog_old.jpg',1)
+    #src = cv2.imread('over.jpg',1)
+    
+    src = bilateralFilterFromCv2(src, 5, 60.0, 60.0)
+    
+    gamma = gamma_correction(src, 0.99, 1/1.35)
+    cv2.imwrite("gamma.jpg", gamma)
+    image = cv2.imread("gamma.jpg",1)
+    cv2.imshow("gamma.jpg", gamma)
+    cv2.imshow("src.jpg", src)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     
 '''
